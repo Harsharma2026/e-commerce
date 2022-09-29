@@ -1,5 +1,27 @@
+import { Link, useNavigate } from 'react-router-dom';
 import image from '../assets/image.jpg';
+import { asyncWrap } from '../utils/asyncWrap';
+import axios from "axios";
+import { useAuth } from '../context/authContext';
 export default function Login(){
+  const navigate = useNavigate()
+  const {
+    setUser
+  } = useAuth()
+  const formhandler=async(e) =>{
+    e.preventDefault()
+    const formData=new FormData(e.target)
+    var formJSON = Object.fromEntries(formData.entries())
+    const [error, result] = await asyncWrap(axios.post("auth/signup", formJSON))
+    if(error){
+      console.log(error);
+    }else{
+      const data = result.data.data;
+      if(setUser) setUser(data) 
+      navigate('/h')
+    }
+    
+  }
     return(
         <div className="grid bg-[#F7F7F7] font-[Raleway-Regular]">
             <div className="grid w-[90%] h-[70%] place-self-center lg:grid-cols-[2fr_1fr]">
@@ -8,11 +30,15 @@ export default function Login(){
                 </div>
                 <div class="block p-6 rounded-lg  bg-[#F7F7F7] max-w-md ">
                     
-  <form>
+  <form onSubmit={formhandler}>
+    <div className="grid justify-center h-12 font-sans text-2xl">
+      <p><b>Create your account</b></p>
+    </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div class="form-group mb-6">
-        <input type="text" class="form-control
+        <input type="text"
+        name="first_name" class="form-control
           block
           w-full
           px-3
@@ -30,7 +56,7 @@ export default function Login(){
           aria-describedby="emailHelp123" placeholder="First name"/>
       </div>
       <div class="form-group mb-6">
-        <input type="text" class="form-control
+        <input type="text" name="last_name" class="form-control
           block
           w-full
           px-3
@@ -49,7 +75,7 @@ export default function Login(){
       </div>
     </div>
     <div class="form-group mb-6">
-      <input type="email" class="form-control block
+      <input type="email" name="email" class="form-control block
         w-full
         px-3
         py-1.5
@@ -66,7 +92,7 @@ export default function Login(){
         placeholder="Email address"/>
     </div>
     <div class="form-group mb-6">
-      <input type="password" class="form-control block
+      <input type="password" name="password" class="form-control block
         w-full
         px-3
         py-1.5
@@ -81,6 +107,23 @@ export default function Login(){
         m-0
         focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleInput126"
         placeholder="Password"/>
+    </div>
+    <div class="form-group mb-6">
+      <input type="text" name="phone" class="form-control block
+        w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleInput126"
+        placeholder="Phone Number"/>
     </div>
     
     <button type="submit" class="
@@ -157,6 +200,16 @@ export default function Login(){
                 />
               </svg>
             </button>
+          </div>
+          <div className="grid justify-center">
+          <p class="text-sm font-semibold mt-2 pt-1 mb-0">
+              Already have an account?
+              <Link
+                to="/login"
+                class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+                > Login
+                </Link>
+                 </p>
           </div>
   </form>
 </div>
