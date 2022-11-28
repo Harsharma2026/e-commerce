@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "client": "cd ./client && npm start",
-    "server": "cd ./server && node ./src/index.js",
+    "server": "cd ./server && npm start",
     "dev": "concurrently \"npm run client\" \"npm run server\"",
-    "install-all": "concurrently \"cd client && npm i\" \"cd server && npm i\" \"npm i\"",
+    "install --all": "concurrently \"cd client && npm i\" \"cd server && npm i\" \"npm i\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

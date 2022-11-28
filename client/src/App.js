@@ -4,12 +4,14 @@ import Signup from './pages/Signup';
 import Landing from './pages/Landing';
 import Redirect from './pages/Redirect';
 
+
 import { useAuth } from './context/authContext';
 import React from 'react';
 import {Routes , Route} from 'react-router-dom'
 import Loading from './pages/Loading';
 import { setAxiosDefault, setToken } from './axiosDefault';
 import NotFound from './pages/404';
+import Cart from './pages/Cart';
 function App() {
   const {user} = useAuth();
   setAxiosDefault();
@@ -29,6 +31,7 @@ function App() {
         :
           <Routes>
             <Route path='/h' element={<Landing/>}/>
+            <Route path='/cart' element={<Cart/>}/>
             {/* <Route path='/settings' element={<Signup/>}/> */}
             <Route path='/login' element={<Redirect/>}/>
             <Route path='/signup' element={<Redirect/>}/>
