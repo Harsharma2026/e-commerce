@@ -129,12 +129,6 @@ export default function Landing() {
       <div className="all dark:bg-[#0303032b]">
         {/* <Slider /> */}
         <div className="">
-          {/* {
-          category.map((cat, index)=>{
-            return <Category catImage={cat.catImage} catName={cat.catName}/>
-          })
-        } */}
-
           <div
             id="carouselExampleSlidesOnly"
             class="carousel slide relative"
@@ -1020,6 +1014,49 @@ export default function Landing() {
           </section>
         </div>
       </div>
+
+          {/* <!-- component --> */}
+<div class="w-full bg-gray-800">
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12">
+        <div class="text-center pb-12">
+            
+            <h1 class="font-bold text-3xl md:text-4xl lg:text-5xl font-heading text-white">
+                Check our awesome team           
+            </h1>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="w-full bg-gray-900 rounded-lg sahdow-lg p-12 flex flex-col justify-center items-center">
+                <div class="mb-8">
+                    <img class="object-center object-cover rounded-full h-36 w-36" src="" alt="photo"/>
+                </div>
+                <div class="text-center">
+                    <p class="text-xl text-white font-bold mb-2">Shubham Shawrikar</p>
+                    <p class="text-base text-gray-400 font-normal">UI/UX Designer</p>
+                </div>
+            </div>
+            <div class="w-full bg-gray-900 rounded-lg sahdow-lg p-12 flex flex-col justify-center items-center">
+                <div class="mb-8">
+                    <img class="object-center object-cover rounded-full h-36 w-36" src="" alt="photo"/>
+                </div>
+                <div class="text-center">
+                    <p class="text-xl text-white font-bold mb-2">Harsh Vardhan Sharma</p>
+                    <p class="text-base text-gray-400 font-normal">Frontend Developer</p>
+                </div>
+            </div>
+            <div class="w-full bg-gray-900 rounded-lg sahdow-lg p-12 flex flex-col justify-center items-center">
+                <div class="mb-8">
+                    <img class="object-center object-cover rounded-full h-36 w-36" src="" alt="photo"/>
+                </div>
+                <div class="text-center">
+                    <p class="text-xl text-white font-bold mb-2">Devanshul Sarashwat</p>
+                    <p class="text-base text-gray-400 font-normal">Backend Developer</p>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+</div>
+
       <div className="footer">
       {/* <!-- component --> */}
 <footer class="bg-gradient-to-r from-gray-100 via-[#bce1ff] to-gray-100">

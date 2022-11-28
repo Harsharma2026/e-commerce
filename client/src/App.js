@@ -13,6 +13,7 @@ import { setAxiosDefault, setToken } from './axiosDefault';
 import NotFound from './pages/404';
 import Cart from './pages/Cart';
 import Genie from './pages/Genie';
+import Address from './pages/Address';
 function App() {
   const {user} = useAuth();
   setAxiosDefault();
@@ -36,6 +37,7 @@ function App() {
             <Route path='/cart' element={<Cart/>}/>
             
             <Route path='/genie' element={<Genie/>}/>
+            <Route path='/address' element={<Address/>}/>
             {/* <Route path='/settings' element={<Signup/>}/> */}
             
             <Route path='/login' element={<Redirect/>}/>
