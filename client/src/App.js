@@ -12,6 +12,7 @@ import Loading from './pages/Loading';
 import { setAxiosDefault, setToken } from './axiosDefault';
 import NotFound from './pages/404';
 import Cart from './pages/Cart';
+import Genie from './pages/Genie';
 function App() {
   const {user} = useAuth();
   setAxiosDefault();
@@ -31,8 +32,12 @@ function App() {
         :
           <Routes>
             <Route path='/h' element={<Landing/>}/>
+            
             <Route path='/cart' element={<Cart/>}/>
+            
+            <Route path='/genie' element={<Genie/>}/>
             {/* <Route path='/settings' element={<Signup/>}/> */}
+            
             <Route path='/login' element={<Redirect/>}/>
             <Route path='/signup' element={<Redirect/>}/>
             <Route path='*' element={<NotFound/>}/>
