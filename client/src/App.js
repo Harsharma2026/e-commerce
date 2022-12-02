@@ -14,6 +14,7 @@ import NotFound from './pages/404';
 import Cart from './pages/Cart';
 import Genie from './pages/Genie';
 import Address from './pages/Address';
+import Payment from './pages/Payment';
 function App() {
   const {user} = useAuth();
   setAxiosDefault();

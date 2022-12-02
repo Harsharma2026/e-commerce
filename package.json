@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "concurrently": "^7.3.0",
+    "react-razorpay": "^1.2.0",
     "react-router-dom": "^6.4.1"
   }
 }

@@ -1,6 +1,27 @@
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useAuth } from "../context/authContext";
 
 export default function Genie() {
+  const [firstName,setFirstName] = useState('');
+  const [lastName,setLastName] = useState('');
+  const {user} = useAuth();
+  useEffect(() => {
+    console.log(user)
+    setFirstName(user.role.first_name)
+    setLastName(user.role.last_name);
+  })
+  const travellerDetails = (e) => {
+    console.log(e);
+    e.preventDefault();
+    const formData = new FormData(e.target)
+    const data = {};
+    for (var pair of formData.entries()) {
+      data[pair[0]] = pair[1]
+    }
+    console.log(data);
+  }
   return (
     // <!-- component -->
     <section class="bg-white dark:bg-gray-900">
@@ -29,15 +50,16 @@ export default function Genie() {
               
             </div>
 
-            <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+            <form onSubmit={travellerDetails} class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
               <div>
                 <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
                   First Name
                 </label>
                 <input
                   type="text"
-                  placeholder="Harsh"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  defaultValue={firstName}
+                  disabled={true}
+                  class="block w-full px-5 py-3 mt-2 disabled:bg-gray-200 disabled:border-gray-400 cursor-not-allowed text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>
 
@@ -47,8 +69,9 @@ export default function Genie() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Sharma"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  defaultValue={lastName}
+                  disabled={true}
+                  class="block w-full px-5 py-3 mt-2 disabled:bg-gray-200 disabled:border-gray-400 cursor-not-allowed text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>           
 
@@ -58,8 +81,10 @@ export default function Genie() {
                 </label>
                 <input
                   type="text"
+                  defaultValue={"USA"}
+                  disabled={true}
                   placeholder="Travelling From"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  class="block w-full px-5 py-3 mt-2 disabled:bg-gray-200 disabled:border-gray-400 cursor-not-allowed text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>
 
@@ -69,6 +94,7 @@ export default function Genie() {
                 </label>
                 <input
                   type="text"
+                  required
                   placeholder="Enter the Destination"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -80,6 +106,7 @@ export default function Genie() {
                 </label>
                 <input
                   type="text"
+                  required
                   placeholder="XX-XX-20XX"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -91,12 +118,13 @@ export default function Genie() {
                 </label>
                 <input
                   type="text"
+                  required
                   placeholder="XX:XX am"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>
 
-              <button class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+              <button type="submit" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                 <span>Submit Details </span>
 
                 <svg

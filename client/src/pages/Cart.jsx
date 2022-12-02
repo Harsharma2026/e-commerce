@@ -1,26 +1,59 @@
+import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext";
+
 export default function Cart() {
-  let checkout = document.getElementById("checkout");
-  let checdiv = document.getElementById("chec-div");
-  let flag3 = false;
-  const checkoutHandler = () => {
-    if (!flag3) {
-      checkout.classList.add("translate-x-full");
-      checkout.classList.remove("translate-x-0");
-      setTimeout(function () {
-        checdiv.classList.add("hidden");
-      }, 1000);
-      flag3 = true;
-    } else {
-      setTimeout(function () {
-        checkout.classList.remove("translate-x-full");
-        checkout.classList.add("translate-x-0");
-      }, 1000);
-      checdiv.classList.remove("hidden");
-      flag3 = false;
-    }
-  };
+  const [cartProducts,setCartProducts] = useState([]);
+  const [cartTotal,setCartTotal] = useState(0);
+  const navigate = useNavigate()
+  const {user} = useAuth();
+  useEffect(() => {
+    axios.post('/user/getCart',{userId: user.role.userId}).then(res => {
+      console.log(res)
+      if(res.data.status){
+        
+        let total = 0;
+        res.data.data.products.map((val) => {
+          total+=val.amount
+        })
+        setCartTotal(total)
+        setCartProducts(res.data.data.products);
+      }
+    })
+  },[])
+  const takeMeBack = () => {
+    navigate('/h')
+  }
+  const takeMeAddress = () => {
+    navigate('/address')
+  }
+  const removeItem = (productId,amount) =>{
+    axios.post('/user/deleteCart',{productId,userId:user.role.userId}).then((res) => {
+      console.log(res)
+      if(res.data.success){
+        document.getElementById(productId+'-product').remove();
+        let rest = cartTotal-amount;
+        setCartTotal(rest);
+        if(rest == 0)
+          navigate('/h')
+      }
+    })
+  }
   return (
-    // <!-- component -->
+    cartProducts.length==0?
+<div class="w-full h-screen flex flex-col items-center justify-center">
+  
+    <div class="flex flex-col items-center justify-center">
+        <p class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider text-gray-600 mt-8">404</p>
+        <p class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-600 mt-2">Cart Empty</p>
+        <p class="md:text-lg xl:text-xl text-gray-500 mt-4">Add products in cart to continue.
+        <a className="text-blue-600 cursor-pointer hover:text-blue-800" onClick={() => {navigate('/h')}}> Go to home</a>
+        </p>
+    </div>
+</div>
+    :
     <>
       <div class="flex items-center justify-center py-8">
         {/* <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ ---> */}
@@ -67,175 +100,60 @@ export default function Cart() {
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                   <polyline points="15 6 9 12 15 18" />
                 </svg>
-                <p class="text-sm pl-2 leading-none dark:hover:text-gray-200">
+                <p onClick={takeMeBack} class="text-sm pl-2 leading-none dark:hover:text-gray-200">
                   Back
                 </p>
               </div>
               <p class="lg:text-4xl text-3xl font-black leading-10 text-gray-800 dark:text-white pt-3">
                 Bag
               </p>
-              <div class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-                <div class="md:w-4/12 2xl:w-1/4 w-full">
+              {
+                cartProducts.map((val,index) => (
+                  <div id={val._id+'-product'} class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
+                <div class="md:w-4/12 2xl:w-1/4 w-full grid place-content-center">
                   <img
-                    src="https://i.ibb.co/SX762kX/Rectangle-36-1.png"
-                    alt="Black Leather Bag"
-                    class="h-full object-center object-cover md:block hidden"
+                    src={val.image}
+                    alt={val.name}
+                    class="object-center w-[200px] h-[200px]  object-cover md:block hidden place-self-center"
                   />
                   <img
-                    src="https://i.ibb.co/g9xsdCM/Rectangle-37.pngg"
-                    alt="Black Leather Bag"
-                    class="md:hidden w-full h-full object-center object-cover"
+                    src={val.image}
+                    alt={val.name}
+                    class="md:hidden w-[200px] h-[200px] object-center object-cover place-self-center"
                   />
                 </div>
                 <div class="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
                   <p class="text-xs leading-3 text-gray-800 dark:text-white md:pt-0 pt-4">
-                    RF293
+                    
                   </p>
                   <div class="flex items-center justify-between w-full pt-1">
                     <p class="text-base font-black leading-none text-gray-800 dark:text-white">
-                      North wolf bag
+                      {val.name}
                     </p>
                     <select
                       aria-label="Select quantity"
                       class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
                     >
                       <option>01</option>
-                      <option>02</option>
-                      <option>03</option>
                     </select>
                   </div>
-                  <p class="text-xs leading-3 text-gray-600 dark:text-white pt-2">
-                    Height: 10 inches
-                  </p>
-                  <p class="text-xs leading-3 text-gray-600 dark:text-white py-4">
-                    Color: Black
-                  </p>
-                  <p class="w-96 text-xs leading-3 text-gray-600 dark:text-white">
-                    Composition: 100% calf leather
-                  </p>
                   <div class="flex items-center justify-between pt-5">
                     <div class="flex itemms-center">
                       <p class="text-xs leading-3 underline text-gray-800 dark:text-white cursor-pointer">
                         Add to favorites
                       </p>
-                      <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">
+                      <button onClick={() => {removeItem(val._id,val.amount)}} class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">
                         Remove
-                      </p>
+                      </button>
                     </div>
                     <p class="text-base font-black leading-none text-gray-800 dark:text-white">
-                      ,000
+                      ${val.amount}
                     </p>
                   </div>
                 </div>
               </div>
-              <div class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-                <div class="md:w-4/12 2xl:w-1/4 w-full">
-                  <img
-                    src="https://i.ibb.co/c6KyDXN/Rectangle-5-1.png"
-                    alt="Gray Sneakers"
-                    class="h-full object-center object-cover md:block hidden"
-                  />
-                  <img
-                    src="https://i.ibb.co/yVSpYqx/Rectangle-6.png"
-                    alt="Gray Sneakers"
-                    class="md:hidden w-full h-full object-center object-cover"
-                  />
-                </div>
-                <div class="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-                  <p class="text-xs leading-3 text-gray-800 dark:text-white md:pt-0 pt-4">
-                    RF293
-                  </p>
-                  <div class="flex items-center justify-between w-full pt-1">
-                    <p class="text-base font-black leading-none text-gray-800 dark:text-white">
-                      LW sneakers
-                    </p>
-                    <select
-                      aria-label="Select quantity"
-                      class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
-                    >
-                      <option>01</option>
-                      <option>02</option>
-                      <option>03</option>
-                    </select>
-                  </div>
-                  <p class="text-xs leading-3 text-gray-600 dark:text-white pt-2">
-                    Height: 10 inches
-                  </p>
-                  <p class="text-xs leading-3 text-gray-600 dark:text-white py-4">
-                    Color: Black
-                  </p>
-                  <p class="w-96 text-xs leading-3 text-gray-600 dark:text-white">
-                    Composition: 100% calf leather
-                  </p>
-                  <div class="flex items-center justify-between pt-5">
-                    <div class="flex itemms-center">
-                      <p class="text-xs leading-3 underline text-gray-800 dark:text-white cursor-pointer">
-                        Add to favorites
-                      </p>
-                      <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">
-                        Remove
-                      </p>
-                    </div>
-                    <p class="text-base font-black leading-none text-gray-800 dark:text-white">
-                      ,000
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-                <div class="md:w-4/12 2xl:w-1/4 w-full">
-                  <img
-                    src="https://i.ibb.co/6gzWwSq/Rectangle-20-1.png"
-                    alt="Black Leather Purse"
-                    class="h-full object-center object-cover md:block hidden"
-                  />
-                  <img
-                    src="https://i.ibb.co/TTnzMTf/Rectangle-21.png"
-                    alt="Black Leather Purse"
-                    class="md:hidden w-full h-full object-center object-cover"
-                  />
-                </div>
-                <div class="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-                  <p class="text-xs leading-3 text-gray-800 dark:text-white md:pt-0 pt-4">
-                    RF293
-                  </p>
-                  <div class="flex items-center justify-between w-full">
-                    <p class="text-base font-black leading-none text-gray-800 dark:text-white">
-                      Luxe card holder
-                    </p>
-                    <select
-                      aria-label="Select quantity"
-                      class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
-                    >
-                      <option>01</option>
-                      <option>02</option>
-                      <option>03</option>
-                    </select>
-                  </div>
-                  <p class="text-xs leading-3 text-gray-600 dark:text-white pt-2">
-                    Height: 10 inches
-                  </p>
-                  <p class="text-xs leading-3 text-gray-600 dark:text-white py-4">
-                    Color: Black
-                  </p>
-                  <p class="w-96 text-xs leading-3 text-gray-600 dark:text-white">
-                    Composition: 100% calf leather
-                  </p>
-                  <div class="flex items-center justify-between pt-5">
-                    <div class="flex itemms-center">
-                      <p class="text-xs leading-3 underline text-gray-800 dark:text-white cursor-pointer">
-                        Add to favorites
-                      </p>
-                      <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">
-                        Remove
-                      </p>
-                    </div>
-                    <p class="text-base font-black leading-none text-gray-800 dark:text-white">
-                      ,000
-                    </p>
-                  </div>
-                </div>
-              </div>
+                ))
+              }
             </div>
             <div class="lg:w-96 md:w-8/12 w-full bg-gray-100 dark:bg-gray-900 h-full">
               <div class="flex flex-col lg:h-screen h-auto lg:px-8 md:px-7 px-4 lg:py-20 md:py-10 py-6 justify-between overflow-y-auto">
@@ -248,20 +166,24 @@ export default function Cart() {
                       Subtotal
                     </p>
                     <p class="text-base leading-none text-gray-800 dark:text-white">
-                      ,000
+                      ${cartTotal}
                     </p>
                   </div>
                   <div class="flex items-center justify-between pt-5">
                     <p class="text-base leading-none text-gray-800 dark:text-white">
                       Shipping
                     </p>
-                    <p class="text-base leading-none text-gray-800 dark:text-white"></p>
+                    <p class="text-base leading-none text-gray-800 dark:text-white">
+                      $50.80
+                    </p>
                   </div>
                   <div class="flex items-center justify-between pt-5">
                     <p class="text-base leading-none text-gray-800 dark:text-white">
                       Tax
                     </p>
-                    <p class="text-base leading-none text-gray-800 dark:text-white"></p>
+                    <p class="text-base leading-none text-gray-800 dark:text-white">
+                      3.20
+                    </p>
                   </div>
                 </div>
                 <div>
@@ -270,11 +192,11 @@ export default function Cart() {
                       Total
                     </p>
                     <p class="text-2xl font-bold leading-normal text-right text-gray-800 dark:text-white">
-                      ,240
+                      ${cartTotal+54}
                     </p>
                   </div>
                   <button
-                    onclick="checkoutHandler1(true)"
+                    onclick={takeMeAddress}
                     class="text-base leading-none w-full py-5 bg-gray-800 border-gray-800 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white dark:hover:bg-gray-700"
                   >
                     Checkout

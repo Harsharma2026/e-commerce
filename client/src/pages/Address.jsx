@@ -1,6 +1,42 @@
 import React from "react";
+import { useCallback } from "react";
+import useRazorpay from "react-razorpay";
 
 export default function Address() {
+
+    const Razorpay = useRazorpay();
+
+    const handlePayment = useCallback(() => {
+  
+      const options = {
+        key: "YOUR_KEY_ID",
+        amount: "3000",
+        currency: "INR",
+        name: "Acme Corp",
+        description: "Test Transaction",
+        image: "https://example.com/your_logo",
+        order_id: "1234",
+        handler: (res) => {
+          console.log(res);
+        },
+        prefill: {
+          name: "Piyush Garg",
+          email: "youremail@example.com",
+          contact: "9999999999",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+  
+      const rzpay = new Razorpay(options);
+      rzpay.open();
+    }, [Razorpay]);
+
+
   return (
     // <!-- component -->
     <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
@@ -184,8 +220,8 @@ export default function Address() {
 
                   <div class="md:col-span-5 text-right">
                     <div class="inline-flex items-end">
-                      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Submit
+                      <button onClick={handlePayment} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Proceed to Pay
                       </button>
                     </div>
                   </div>

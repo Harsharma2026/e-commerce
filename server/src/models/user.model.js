@@ -34,6 +34,13 @@ const schema = new Schema(
       type: String,
       private: true,
     },
+    cart:{
+      type: [Schema.Types.ObjectId],
+      ref:'Product',
+      required:true,
+      autopopulate: true,
+      default: []
+    }
   },
   {
     timestamps: true,
@@ -43,6 +50,7 @@ const schema = new Schema(
 // Plugins
 schema.plugin(uniqueValidator)
 schema.plugin(privateValidator)
+schema.plugin(require('mongoose-autopopulate'))
 
 // schema.virtual('name').get(function (this: IUserModel) {
 //   return `${this.first_name} ${this.last_name}`
