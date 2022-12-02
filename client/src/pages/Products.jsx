@@ -161,7 +161,7 @@ export default function Products() {
 
                 <div>
                   <img
-                    src="https://mdbootstrap.com/img/new/ecommerce/vertical/132.jpg"
+                    src={val.image}
                     class="w-full rounded-lg shadow-lg"
                     alt="watches"
                   />

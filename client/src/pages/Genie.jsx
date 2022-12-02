@@ -1,6 +1,8 @@
+import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
 export default function Genie() {
@@ -12,6 +14,7 @@ export default function Genie() {
     setFirstName(user.role.first_name)
     setLastName(user.role.last_name);
   })
+  const navigate = useNavigate()
   const travellerDetails = (e) => {
     console.log(e);
     e.preventDefault();
@@ -20,10 +23,15 @@ export default function Genie() {
     for (var pair of formData.entries()) {
       data[pair[0]] = pair[1]
     }
-    console.log(data);
+    const finalData = {...data, firstName,lastName,from:"USA",userId:user.role.userId}
+    console.log(finalData);
+    axios.post("traveller/create",finalData).then((res) => {
+      if(res.data.status){
+        navigate('/h')
+      }
+    })
   }
   return (
-    // <!-- component -->
     <section class="bg-white dark:bg-gray-900">
       <div class="flex justify-center min-h-screen">
         <div
@@ -58,6 +66,7 @@ export default function Genie() {
                 <input
                   type="text"
                   defaultValue={firstName}
+                  name="firstName"
                   disabled={true}
                   class="block w-full px-5 py-3 mt-2 disabled:bg-gray-200 disabled:border-gray-400 cursor-not-allowed text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -70,6 +79,7 @@ export default function Genie() {
                 <input
                   type="text"
                   defaultValue={lastName}
+                  name="lastName"
                   disabled={true}
                   class="block w-full px-5 py-3 mt-2 disabled:bg-gray-200 disabled:border-gray-400 cursor-not-allowed text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -83,6 +93,7 @@ export default function Genie() {
                   type="text"
                   defaultValue={"USA"}
                   disabled={true}
+                  name="from"
                   placeholder="Travelling From"
                   class="block w-full px-5 py-3 mt-2 disabled:bg-gray-200 disabled:border-gray-400 cursor-not-allowed text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -95,6 +106,7 @@ export default function Genie() {
                 <input
                   type="text"
                   required
+                  name="destination"
                   placeholder="Enter the Destination"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -105,8 +117,9 @@ export default function Genie() {
                   Date of Travel
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   required
+                  name="date"
                   placeholder="XX-XX-20XX"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -119,6 +132,7 @@ export default function Genie() {
                 <input
                   type="text"
                   required
+                  name="time"
                   placeholder="XX:XX am"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />

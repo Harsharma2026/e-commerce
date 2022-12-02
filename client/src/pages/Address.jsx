@@ -1,45 +1,41 @@
 import React from "react";
+import { useState } from "react";
 import { useCallback } from "react";
-import useRazorpay from "react-razorpay";
-
+import { useAuth } from "../context/authContext";
+import paymentgif from '../assets/payment.gif'
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 export default function Address() {
 
-    const Razorpay = useRazorpay();
-
-    const handlePayment = useCallback(() => {
-  
-      const options = {
-        key: "YOUR_KEY_ID",
-        amount: "3000",
-        currency: "INR",
-        name: "Acme Corp",
-        description: "Test Transaction",
-        image: "https://example.com/your_logo",
-        order_id: "1234",
-        handler: (res) => {
-          console.log(res);
-        },
-        prefill: {
-          name: "Piyush Garg",
-          email: "youremail@example.com",
-          contact: "9999999999",
-        },
-        notes: {
-          address: "Razorpay Corporate Office",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-  
-      const rzpay = new Razorpay(options);
-      rzpay.open();
-    }, [Razorpay]);
+  const {user} = useAuth();
+  console.log(user);
+  const [name,setName] = useState(user.role.first_name+' '+user.role.last_name);
+  const [email,setEmail] = useState(user.email);
+  const [payment,setPayment] = useState(false);
+  const navigate = useNavigate()
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target)
+    const data = {};
+    for (var pair of formData.entries()) {
+      data[pair[0]] = pair[1]
+    }
+    const finalData = {...data, name,email,userId:user.role.userId}
+    console.log(finalData);
+    setPayment(true);
 
 
+    axios.post("order/create",finalData).then((res) => {
+      console.log(res)
+      if(res.data.status){
+        navigate(`/status/${res.data.data.id}`)
+      }
+    })
+
+  }
   return (
     // <!-- component -->
-    <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+    <div class="min-h-screen relative p-6 bg-gray-100 flex items-center justify-center">
       <div class="container max-w-screen-lg mx-auto">
         <div>
           <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -49,16 +45,16 @@ export default function Address() {
                 <p>Please fill out all the fields.</p>
               </div>
 
-              <div class="lg:col-span-2">
+              <form onSubmit={handleSubmit} class="lg:col-span-2">
                 <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                   <div class="md:col-span-5">
                     <label for="full_name">Full Name</label>
                     <input
                       type="text"
-                      name="full_name"
-                      id="full_name"
+                      required
+                      onChange={(e) => {setName(e.target.value)}}
+                      defaultValue={name}
                       class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value=""
                     />
                   </div>
 
@@ -67,9 +63,9 @@ export default function Address() {
                     <input
                       type="text"
                       name="email"
-                      id="email"
-                      class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value=""
+                      defaultValue={email}
+                      disabled={true}
+                      class="h-10 border disabled:bg-gray-200 disabled:border-gray-300 mt-1 rounded px-4 w-full bg-gray-50"
                       placeholder="email@domain.com"
                     />
                   </div>
@@ -79,10 +75,9 @@ export default function Address() {
                     <input
                       type="text"
                       name="address"
-                      id="address"
+                      required
                       class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value=""
-                      placeholder=""
+                      placeholder="Address"
                     />
                   </div>
 
@@ -91,10 +86,10 @@ export default function Address() {
                     <input
                       type="text"
                       name="city"
-                      id="city"
+                      required
+
                       class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value=""
-                      placeholder=""
+                      placeholder="City"
                     />
                   </div>
 
@@ -103,10 +98,10 @@ export default function Address() {
                     <div class="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                       <input
                         name="country"
-                        id="country"
                         placeholder="Country"
+                      required
+
                         class="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
-                        value=""
                       />
                       <button
                         tabindex="-1"
@@ -151,9 +146,10 @@ export default function Address() {
                       <input
                         name="state"
                         id="state"
+                      required
+
                         placeholder="State"
                         class="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
-                        value=""
                       />
                       <button
                         tabindex="-1"
@@ -198,13 +194,14 @@ export default function Address() {
                       type="text"
                       name="zipcode"
                       id="zipcode"
+                      required
+
                       class="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                       placeholder=""
-                      value=""
                     />
                   </div>
 
-                  <div class="md:col-span-5">
+                  {/* <div class="md:col-span-5">
                     <div class="inline-flex items-center">
                       <input
                         type="checkbox"
@@ -216,21 +213,27 @@ export default function Address() {
                         My billing address is different than above.
                       </label>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div class="md:col-span-5 text-right">
                     <div class="inline-flex items-end">
-                      <button onClick={handlePayment} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Proceed to Pay
                       </button>
                     </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
+      <div className={`absolute z-50 place-content-center bg-white w-full h-full ${payment?'grid':'hidden'}`}>
+      <div className="w-[500px] h-[500px] grid place-content-center">
+        <img src={paymentgif} alt="" />
+      </div>
+      </div>
+
     </div>
   );
 }

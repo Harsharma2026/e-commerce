@@ -8,6 +8,7 @@ export default function Cart() {
   const [cartProducts,setCartProducts] = useState([]);
   const [cartTotal,setCartTotal] = useState(0);
   const navigate = useNavigate()
+  const addressNavigate = useNavigate()
   const {user} = useAuth();
   useEffect(() => {
     axios.post('/user/getCart',{userId: user.role.userId}).then(res => {
@@ -27,7 +28,7 @@ export default function Cart() {
     navigate('/h')
   }
   const takeMeAddress = () => {
-    navigate('/address')
+    addressNavigate('/address')
   }
   const removeItem = (productId,amount) =>{
     axios.post('/user/deleteCart',{productId,userId:user.role.userId}).then((res) => {
@@ -196,7 +197,7 @@ export default function Cart() {
                     </p>
                   </div>
                   <button
-                    onclick={takeMeAddress}
+                    onClick={takeMeAddress}
                     class="text-base leading-none w-full py-5 bg-gray-800 border-gray-800 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white dark:hover:bg-gray-700"
                   >
                     Checkout

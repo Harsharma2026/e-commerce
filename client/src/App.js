@@ -15,6 +15,9 @@ import Cart from './pages/Cart';
 import Genie from './pages/Genie';
 import Address from './pages/Address';
 import Payment from './pages/Payment';
+import Status from './pages/Status';
+import OrderStatus from './components/OrderStatus';
+
 function App() {
   const {user} = useAuth();
   setAxiosDefault();
@@ -36,6 +39,7 @@ function App() {
             <Route path='/h' element={<Landing/>}/>
             
             <Route path='/cart' element={<Cart/>}/>
+            <Route path='/status/:orderId' element={<OrderStatus/>}/>
             
             <Route path='/genie' element={<Genie/>}/>
             <Route path='/address' element={<Address/>}/>
