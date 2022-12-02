@@ -34,7 +34,7 @@ export default function Address() {
 
   }
   return (
-    // <!-- component -->
+    
     <div class="min-h-screen relative p-6 bg-gray-100 flex items-center justify-center">
       <div class="container max-w-screen-lg mx-auto">
         <div>

@@ -57,7 +57,7 @@ export default function Cart() {
     :
     <>
       <div class="flex items-center justify-center py-8">
-        {/* <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ ---> */}
+        
         <button
           onclick="checkoutHandler(false)"
           class="py-2 px-10 rounded bg-indigo-600 hover:bg-indigo-700 text-white"
@@ -69,7 +69,7 @@ export default function Cart() {
         class="w-full h-full bg-black dark:bg-gray-900 bg-opacity-90 top-0 overflow-y-auto overflow-x-hidden fixed sticky-0"
         id="chec-div"
       >
-        {/* <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ ---> */}
+        
         <div
           class="w-full absolute z-10 right-0 h-full overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700"
           id="checkout"

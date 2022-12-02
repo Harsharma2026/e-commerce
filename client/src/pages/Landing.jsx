@@ -40,6 +40,10 @@ export default function Landing() {
   const Cart = () => {
     navigate('/cart')
   }
+  const logout = () => {
+    localStorage.removeItem('ecommUser');
+    navigate('/login');
+  }
   return (
     <>
       <div className="header sticky w-full top-0 z-[1000]">
@@ -124,6 +128,16 @@ export default function Landing() {
                     >
                       Login as Genie
                     </a>
+                  </li>
+                  <li class="nav-item">
+                    <button
+                      onClick={logout}
+                      class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 dark:text-white dark:hover:text-gray-100 dark:focus:text-gray-100 transition duration-150 ease-in-out"
+                      data-mdb-ripple="true"
+                      data-mdb-ripple-color="light"
+                    >
+                      Logout
+                    </button>
                   </li>
                   <li>
                     <div className="switchMode">
